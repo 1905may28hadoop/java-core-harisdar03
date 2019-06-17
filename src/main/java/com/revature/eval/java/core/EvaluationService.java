@@ -275,7 +275,7 @@ public class EvaluationService {
 				//this next block is the same concept as the block above but it will be used if the input type is String
 			{
 				String s = (String) t;
-				key = (Integer) Integer.parseInt(s);
+				key = Integer.parseInt(s);
 				System.out.println(key);
 				while (beginning <= end) {
 					int middle = beginning + (end - beginning) / 2;
