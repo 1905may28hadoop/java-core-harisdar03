@@ -20,11 +20,12 @@ public class EvaluationService {
 	public String acronym(String phrase) {
 		// TODO Write an implementation for this method declaration
 		String acronym = new String();
-		acronym = phrase.substring(0, 1);
+		acronym = phrase.substring(0, 1); //gives acronym the first letter of the inputted string
 		for (int i = 0; i < phrase.length(); i++) {
-			if (phrase.charAt(i) == ' ' || phrase.charAt(i) == '-') {
+			if (phrase.charAt(i) == ' ' || phrase.charAt(i) == '-') { 
 				acronym = acronym + phrase.substring(i + 1, i + 2);
-			}
+			} //this loop iterates through the input and checks if there is a space or a '-' at the current index
+			// and then if there is a space or a '-', then the acronym string will add the next letter in the string to the acronym
 
 		}
 		acronym = acronym.toUpperCase();
@@ -49,6 +50,7 @@ public class EvaluationService {
 	 */
 	public int getScrabbleScore(String string) {
 		// TODO Write an implementation for this method declaration
+		//create a counter for each point value that can be obtained in scrabble
 		int onepointcounter = 0;
 		int twopointcounter = 0;
 		int threepointcounter = 0;
@@ -58,6 +60,8 @@ public class EvaluationService {
 		int tenpointcounter = 0;
 		int finalvalue = 0;
 		String lowercasestring = string.toLowerCase();
+		
+		//use a for loop to iterate through string, increment appropriate counter depending on what the character is at that current value of i
 		for (int i = 0; i < string.length(); i++) {
 			if (lowercasestring.charAt(i) == 'a' || lowercasestring.charAt(i) == 'e' || lowercasestring.charAt(i) == 'i'
 					|| lowercasestring.charAt(i) == 'o' || lowercasestring.charAt(i) == 'u'
@@ -82,6 +86,7 @@ public class EvaluationService {
 				tenpointcounter++;
 			}
 		}
+		//calculate finalvalue
 		finalvalue = (1 * onepointcounter) + (2 * twopointcounter) + (3 * threepointcounter) + (4 * fourpointcounter)
 				+ (5 * fivepointcounter) + (8 * eightpointcounter) + (10 * tenpointcounter);
 		System.out.println("Scrabble Score for word " + string + " is: " + finalvalue);
@@ -122,19 +127,24 @@ public class EvaluationService {
 	public String cleanPhoneNumber(String string) {
 		// TODO Write an implementation for this method declaration
 
+		
 		System.out.println("Inputted phone number: " + string);
 		String str;
+		//clean out all spaces in the inputted string
 		str = string.replaceAll("\\s", "");
 
+		//convert the string into an array of characters, and then create an ArrayList that holds the values of that array
 		char[] array = str.toCharArray();
 		List<Character> list = new ArrayList<>();
 
 		for (int i = 0; i < array.length; i++) {
 			list.add(array[i]);
 		}
+		//iterate through the list, and if the character is not a digit, remove it from the list
 		for (int i = 0; i < list.size(); i++) {
 			if (Character.isDigit(list.get(i)) == false) {
 				list.remove(i);
+				//if the character is a special character, throw an IllegalArgumentException
 				if ((Character.isLetter(list.get(i)) == true) || (list.get(i) == '!') || (list.get(i) == '@')
 						|| (list.get(i) == '%') || (list.get(i) == ':')) {
 					System.err.println("Invalid characters");
@@ -143,12 +153,13 @@ public class EvaluationService {
 				}
 			}
 		}
-
+		//use StringBuilder to create a string out of the ArrayList of characters after appropriate elements have been removed
 		StringBuilder sb = new StringBuilder();
 		for (Character c : list) {
 			sb.append(c);
 		}
 		String finalstr = sb.toString();
+		//throw an exception if there are more than 10 digits in a phone number
 		if (finalstr.length() > 10) {
 			System.err.println("Too many digits");
 			throw new IllegalArgumentException();
@@ -172,13 +183,18 @@ public class EvaluationService {
 		// TODO Write an implementation for this method declaration
 
 		Map<String, Integer> map = new HashMap<>();
+		//create a list
 		List<String> list = new ArrayList<>();
+		//create a string array split at either spaces, commas, or a new line 
 		String[] array = string.split(" |,|\n");
+		//initialize list with values of the String array formed by splitting the input string
 		for (int i = 0; i < array.length; i++) {
 
 			list.add(array[i]);
 		}
-
+		//use an enhanced for loop to iterate through the list, and check that the current s is not blank, 
+		// and then if the map already has that string, then the count for that string increments, 
+		//and if its not already in the map, put it in the map as a new entry
 		for (String s : list) {
 			if (s.equals("") == false) {
 				if (map.containsKey(s)) {
@@ -236,25 +252,28 @@ public class EvaluationService {
 			int key = 0;
 			int beginning = 0;
 			int end = sortedList.size();
+			//this block of code will run when the inputted type of T is a an Integer
 			if (t instanceof Integer) {
 				key = (Integer) t;
 				while (beginning <= end) {
-					int middle = beginning + (end - beginning) / 2;
-					if (sortedList.get(middle).equals(key)) {
-						System.out.println("The element you want to search for: " + key);
+					int middle = beginning + (end - beginning) / 2; //find middle position of list
+					if (sortedList.get(middle).equals(key)) { //if the middle position is where the "key" variable is located, then that is the index we are looking for
+						System.out.println("The element you want to search for: " + key); 
 						System.out.println("is located at index: " + middle);
 						return middle;
 					}
-					if ((Integer) sortedList.get(middle) < key) {
-						beginning = middle + 1;
+					if ((Integer) sortedList.get(middle) < key) { //if the condition above fails, then this condition will check if the "key" value is smaller or larger than the middle value
+						beginning = middle + 1; //if the middle element of the list is less than the key value, then the new beginning of the array is the upper half of the list
 
-					} else {
+					} else { //if the middle element is greater than the key, then the new array would end at the element one before the middle
 						end = middle - 1;
 					}
 				}
 				return -1;
 
-			} else {
+			} else 
+				//this next block is the same concept as the block above but it will be used if the input type is String
+			{
 				String s = (String) t;
 				key = (Integer) Integer.parseInt(s);
 				System.out.println(key);
@@ -340,12 +359,12 @@ public class EvaluationService {
 	public List<Long> calculatePrimeFactorsOf(long l) {
 		// TODO Write an implementation for this method declaration
 		long copy = l;
-		List<Long> primes = new ArrayList<>();
+		List<Long> primes = new ArrayList<>(); //use an ArrayList because you dont know how many prime factors there will be
 		
-		for (int i = 2; i <= l; i++) {
-			while (l % i == 0) {
+		for (int i = 2; i <= l; i++) { //iterate from 2(the first prime number) up to the number of interest
+			while (l % i == 0) { //every time a factor of l appears, add that factor to the list of primes
 				primes.add((long) i);
-				l = l / i;
+				l = l / i; //once a factor has been found, the original number is divided by that factor, then the factors of the new value of l are searched for
 			}
 		}
 		System.out.println("The prime factors for " + copy + " are:");
@@ -388,41 +407,41 @@ public class EvaluationService {
 		 */
 		public static String encode(String string) {
 			// TODO Write an implementation for this method declaration
-			String alphabet = "abcdefghijklmnopqrstuvwxyz";
-			String reversed = "zyxwvutsrqponmlkjihgfedcba";
+			String alphabet = "abcdefghijklmnopqrstuvwxyz"; //a string to reference characters from the original alphabet before encoding
+			String reversed = "zyxwvutsrqponmlkjihgfedcba";//a string to reference the corresponding characters for the cipher 
 			String encoded = "";
 			System.out.println("decoded string: " + string);
 			string = string.toLowerCase();
-			string = string.replaceAll("\\s", "").replaceAll("\\.", "").replaceAll("\\,", "");
+			string = string.replaceAll("\\s", "").replaceAll("\\.", "").replaceAll("\\,", ""); //splice out any spaces or punctuation
 
 			for (int i = 0; i < string.length(); i++) {
-				if (Character.isDigit(string.charAt(i)) == false) {
+				if (Character.isDigit(string.charAt(i)) == false) { //make sure the character in question isnt a digit (numbers arent ciphered)
 
-					char codechar = string.charAt(i);
-					int x = alphabet.indexOf(codechar);
-					char c = reversed.charAt(x);
-					encoded = encoded + c;
+					char codechar = string.charAt(i); //create a character to represent the character at the current iteration
+					int x = alphabet.indexOf(codechar); //create an integer that will carry the index of the character that needs to be coded
+					char c = reversed.charAt(x);//create a new character that will represent the coded character
+					encoded = encoded + c;//add coded character to a new string
 				} else {
-					encoded = encoded + string.charAt(i);
+					encoded = encoded + string.charAt(i); //if the character in question is a number, then just add that number to the encoded string
 				}
 
 			}
-
-			List<Character> encodedlist = new ArrayList<>();
+			
+			List<Character> encodedlist = new ArrayList<>(); //create a list of characters of the encoded string
 			for (int i = 0; i < encoded.length(); i++) {
 				encodedlist.add(encoded.charAt(i));
 			}
 			int a = 5;
-			while (a < encodedlist.size()) {
+			while (a < encodedlist.size()) { //add space after every 5 characters in the coded string
 				encodedlist.add(a, ' ');
 				a = a + 6;
 			}
-			StringBuilder sb = new StringBuilder();
+			StringBuilder sb = new StringBuilder(); //use string builder to recreate the encoded string
 			for (Character c : encodedlist) {
 				sb.append(c);
 			}
 
-			System.out.println("encoded string: " + sb.toString());
+			System.out.println("encoded string: " + sb.toString()); //use toString() to convert sb to a String
 			return sb.toString();
 		}
 
@@ -434,14 +453,14 @@ public class EvaluationService {
 		 */
 		public static String decode(String string) {
 			// TODO Write an implementation for this method declaration
-			String alphabet = "abcdefghijklmnopqrstuvwxyz";
-			String reversed = "zyxwvutsrqponmlkjihgfedcba";
+			String alphabet = "abcdefghijklmnopqrstuvwxyz"; //a string to reference alphabet characters
+			String reversed = "zyxwvutsrqponmlkjihgfedcba";// a string to reference alphabet characters in reverse (ciphered)
 			String decoded = "";
 			System.out.println("encoded string: " + string);
 			string = string.toLowerCase();
-			string = string.replaceAll("\\s", "").replaceAll("\\.", "").replaceAll("\\,", "");
+			string = string.replaceAll("\\s", "").replaceAll("\\.", "").replaceAll("\\,", ""); //remove any spaces or punctuation
 			for (int i = 0; i < string.length(); i++) {
-				if (Character.isDigit(string.charAt(i)) == false) {
+				if (Character.isDigit(string.charAt(i)) == false) { //produce a decoded string the same way as we did in the encode method, just now we are looking to the reversed alphabet first to figure out which character from the normal alphabet the character corresponds to
 
 					char decodechar = string.charAt(i);
 					int x = reversed.indexOf(decodechar);
@@ -499,20 +518,20 @@ public class EvaluationService {
 		System.out.println(string);
 		string = string.replaceAll("\\?", "");
 
-		String[] words = string.split(" ");
+		String[] words = string.split(" "); //create a string array of the words in the inputted string
 		for (int i = 0; i < words.length; i++) {
 			if (words[i].equals(add)) {
-				sum = (Integer.parseInt(words[i - 1]) + Integer.parseInt(words[i + 1]));
+				sum = (Integer.parseInt(words[i - 1]) + Integer.parseInt(words[i + 1])); // the numbers that need to be manipulated are directly before and after the keyword
 				System.out.println(sum);
 				return sum;
 			}
 			if (words[i].equals(subtract)) {
-				difference = (Integer.parseInt(words[i - 1]) - Integer.parseInt(words[i + 1]));
+				difference = (Integer.parseInt(words[i - 1]) - Integer.parseInt(words[i + 1])); //use parseInt to convert string to int
 				System.out.println(difference);
 				return difference;
 			}
 			if (words[i].equals(multiply)) {
-				product = (Integer.parseInt(words[i - 1]) * Integer.parseInt(words[i + 2]));
+				product = (Integer.parseInt(words[i - 1]) * Integer.parseInt(words[i + 2])); //multiply and divide require you to check the element 2 after the keyword because the input says "multiplied by"
 				System.out.println(product);
 				return product;
 			}
